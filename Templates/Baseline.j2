@@ -1,4 +1,4 @@
-{% if Switch.type == 'ingress'  %}
+{% if Switch.zone_type == 'ing'  %}
 {# -------------------ACL-------------------------- #}
 time-range backup
 periodic daily 00:00 to 06:59
@@ -110,8 +110,8 @@ class class-default
 set dscp default
 {# --------------------------------------------------------------------------- #}
 {% for interface in Interfaces %}
-{% if interface.type == 'i'  %}
-interface {{interface.interfaceType}}{{interface.interfacePort}}
+{% if interface.zone_type == 'ing'  %}
+interface {{interface.name}}
 service-policy input LAB-IN
 exit
 {% endif %}
@@ -192,8 +192,8 @@ class class-default
 fair-queue
 random-detect dscp-based
 {% for interface in Interfaces %}
-{% if interface.type == 'o'  %}
-interface {{interface.interfaceType}}{{interface.interfacePort}}
+{% if interface.zone_type == 'eg'  %}
+interface {{interface.name}}
 service-policy output LAB-OUT
 exit
 {% endif %}
