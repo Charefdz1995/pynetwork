@@ -46,5 +46,15 @@ class topology(object): # the base topology
 		self.name = name 
 		self.switches = switches # switches list
 		self.links = links # links list
+class qos_classification_class(object):
+        def __init__(self,name_int,dscp_value):
+                self.name = name
+                self.dscp_value = dscp_value
+                # TODO: add attributes
+class qos_class(object)
+        def __init__(self,name,markes):
+                self.name = name
+                self.markes = markes #list of dcsp values for matching
+                # TODO: add attributes
 		
 
