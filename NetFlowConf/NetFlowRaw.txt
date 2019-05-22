@@ -8,9 +8,9 @@ match transport destination-port
 match ipv4 interface input 
 collect counter bytes
 collect counter packets 
-collect timestapmp sys-uptime first
-collect timestapmp sys-uptime last
-collect appplication name
+collect timestamp sys-uptime first
+collect timestamp sys-uptime last
+collect application name
 
 flow exporter ESIExport 
 
