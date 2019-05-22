@@ -21,12 +21,12 @@ Router1(config-flow-record)#match ipv4 destination address
 Router1(config-flow-record)#match ipv4 protocol 
 Router1(config-flow-record)#match transport source-port 
 Router1(config-flow-record)#match transport destination-port 
-Router1(config-flow-record)#match ipv4 interface input 
+Router1(config-flow-record)#match  interface input 
 Router1(config-flow-record)#collect counter bytes
 Router1(config-flow-record)#collect counter packets 
-Router1(config-flow-record)#collect timestapmp sys-uptime first
-Router1(config-flow-record)#collect timestapmp sys-uptime last
-Router1(config-flow-record)#collect appplication name                //this command uses NBAR2 (Network Based Application Recognition 2) to retrieve the name of the application 
+Router1(config-flow-record)#collect timestamp sys-uptime first
+Router1(config-flow-record)#collect timestamp sys-uptime last
+Router1(config-flow-record)#collect application name                //this command uses NBAR2 (Network Based Application Recognition 2) to retrieve the name of the application 
 Router1(config-flow-record)#exit
 
 
