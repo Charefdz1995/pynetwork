@@ -1,0 +1,64 @@
+
+In Order to configure NetFlow version 9 also know as Flexible NetFlow there are 4 basic steps:
+
+- Create a Flow Record 
+- Create a Flow Exporter 
+- Create a Flow Monitor
+- Apply the Flow Monitor to interfaces
+
+Here is an example of an NetFlow configuration:
+
+we go to the global config mode 
+Router1#configure terminal
+
+starting with step 1, we create a flow record for this example we name it ESIrecord 
+
+Router1(config)#flow record ESIrecord
+Next we define match and collect statements to capture fields to include in the flow record 
+
+Router1(config-flow-record)#match ipv4 source address
+Router1(config-flow-record)#match ipv4 destination address
+Router1(config-flow-record)#match ipv4 protocol 
+Router1(config-flow-record)#match transport source-port 
+Router1(config-flow-record)#match transport destination-port 
+Router1(config-flow-record)#match ipv4 interface input 
+Router1(config-flow-record)#collect counter bytes
+Router1(config-flow-record)#collect counter packets 
+Router1(config-flow-record)#collect timestapmp sys-uptime first
+Router1(config-flow-record)#collect timestapmp sys-uptime last
+Router1(config-flow-record)#collect appplication name                //this command uses NBAR2 (Network Based Application Recognition 2) to retrieve the name of the application 
+Router1(config-flow-record)#exit
+
+
+
+Next we create a flow exporter, it sotres the information for export such as the IP address of the flow analyzer, the UDP port ...
+
+Router1(config)#flow exporter ESIExport 
+
+Router1(config-flow-exporter)#descriptionExports to the datacenter  //(Optional) Configures a description
+Router1(config-flow-exporter)#destination 192.168.2.5  //Specifiesthe IP address or host name of the destination system for the exporter.
+Router1(config-flow-exporter)#source fastethernet0/0   //Specifiesthe local interfacefrom whichthe exporterwill use the IP addressas the sourceIP addressfor exporteddatagrams.
+Router1(config-flow-exporter)#transport UDP 2055       //
+Router1(config-flow-exporter)#export-protocol netflow-v9 
+Router1(config-flow-exporter)#template data timeout 60           //(Optional)Configuresresendingof templatesbasedon a timeout.
+Router1(config-flow-exporter)#option application-table timeout 60 //related to NBAR2
+Router1(config-flow-exporter)#option application-attributes timeout 300  //related to NBAR2
+Router1(config-flow-exporter)#exit
+
+Now we create a flow monitor:
+
+Router1(config)#flow monitor ESImonitor
+Router1(config-flow-monitor)#record ESIrecord
+Router1(config-flow-monitor)#exporter ESIExport 
+Router1(config-flow-monitor)#cache timeout active 60
+Router1(config-flow-monitor)#cache timeout inactive 15 
+Router1(config-flow-monitor)#exit
+
+now we apply the flow monitor we created to the interfaces:
+
+Router1(config)#interface fa0/0 
+Router1(config-if)#ip flow monitor ESImonitor input
+Router1(config-if)#ip flow monitor ESImonitor output 
+Router1(config-if)#exit
+Router1(config)#do wr
+
