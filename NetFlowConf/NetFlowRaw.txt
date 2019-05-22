@@ -5,7 +5,7 @@ match ipv4 destination address
 match ipv4 protocol 
 match transport source-port 
 match transport destination-port 
-match ipv4 interface input 
+match interface input 
 collect counter bytes
 collect counter packets 
 collect timestamp sys-uptime first
